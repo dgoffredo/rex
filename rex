@@ -29,6 +29,25 @@ will be treated as a single subpattern match.""")
     return parser.parse_args(args)
 
 
+def all_matches(regex, line):
+    """Find all matches of the regex from the line of text.  Yield tuples of
+    subgroup matches, one tuple for each match.
+    """
+    start = 0
+    while start < len(line):
+        match = regex.search(line, start)
+        if match is None:
+            break
+
+        # If there are no subpattern matches, then use the entire match as if
+        # it were one subpattern match.
+        groups = match.groups() or (match.group(0),)
+        yield groups
+        
+        # Try the rest of the line.
+        start = match.end()
+
+
 def main(args):
     options = parse_command_line(args)
 
@@ -39,28 +58,13 @@ def main(args):
     regex = re.compile(options.pattern, flags)
 
     for line in sys.stdin:
-        # extract all matches
-        start = 0
-        while start < len(line):
-            match = regex.search(line, start)
-            if match is None:
-                break
-
-            # `match.groups()` is a tuple of the subpattern matches.  Either
-            # print them separated by spaces, or print as JSON.
-            # First, though, if there are no subpattern matches, then use the
-            # entire match as if it were one subpattern match.
-            groups = match.groups() or (match.group(0),)
-
+        for groups in all_matches(regex, line):
             if options.json:
                 json.dump(groups, sys.stdout)
             else:
                 sys.stdout.write(' '.join(groups))
 
             sys.stdout.write('\n')
-            
-            # Try the rest of the line.
-            start = match.end()
 
 
 if __name__ == '__main__':

@@ -10,9 +10,9 @@ What
 ----
 ```console
 $ <rex ./rex '\b(r\w+)\.(\w+)'
+regex search
 re IGNORECASE
 re compile
-regex search
 ```
 
 More
