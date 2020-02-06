@@ -1,0 +1,2 @@
+README.md: README.md.m4
+	m4 README.md.m4 > README.md
