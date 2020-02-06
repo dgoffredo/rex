@@ -50,9 +50,7 @@ def main(args):
             # print them separated by spaces, or print as JSON.
             # First, though, if there are no subpattern matches, then use the
             # entire match as if it were one subpattern match.
-            groups = match.groups()
-            if not groups:
-                groups = (match.group(0),)
+            groups = match.groups() or (match.group(0),)
 
             if options.json:
                 json.dump(groups, sys.stdout)
