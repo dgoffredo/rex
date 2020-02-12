@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
+import fileinput
 import json
 import re
+import signal
 import sys
 
 
@@ -10,7 +12,9 @@ def parse_command_line(args):
     parser = argparse.ArgumentParser(description=
         'Extract substrings from lines of text using a regular expression.',
         epilog=
-"""Read lines from standard input, and print results to standard output.
+"""Read lines from the optionally specified input files (or from standard input
+if no files are specified), and print results to standard output.
+
 If the specified pattern contains subpatterns, then for each match found in
 each input line, print a line of space-separated subpattern matches.
 
@@ -25,6 +29,9 @@ will be treated as a single subpattern match.""")
         'match without making a distinction between upper case and lower case')
     parser.add_argument('pattern', help=
         'Python-style regular expression against which to match input lines')
+    parser.add_argument('files', nargs='*', help=
+        'Paths to files to read line-by-line.  Standard input ("-") is the '
+        'default.')
 
     return parser.parse_args(args)
 
@@ -57,7 +64,7 @@ def main(args):
 
     regex = re.compile(options.pattern, flags)
 
-    for line in sys.stdin:
+    for line in fileinput.input(options.files):
         for groups in all_matches(regex, line):
             if options.json:
                 json.dump(groups, sys.stdout)
@@ -68,4 +75,5 @@ def main(args):
 
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal.SIG_DFL) # signal signal signal signal
     main(sys.argv[1:])
