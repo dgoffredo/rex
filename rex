@@ -27,6 +27,8 @@ will be treated as a single subpattern match.""")
     parser.add_argument('-i', '--ignore-case', dest='ignore_case',
                         action='store_true', help=
         'match without making a distinction between upper case and lower case')
+    parser.add_argument('-s', '--separator', default=' ', help=
+        'separate subpatterns with specified string (defaults to a space)')
     parser.add_argument('pattern', help=
         'Python-style regular expression against which to match input lines')
     parser.add_argument('files', nargs='*', help=
@@ -69,7 +71,7 @@ def main(args):
             if options.json:
                 json.dump(groups, sys.stdout)
             else:
-                sys.stdout.write(' '.join(groups))
+                sys.stdout.write(options.separator.join(groups))
 
             sys.stdout.write('\n')
 

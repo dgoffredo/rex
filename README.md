@@ -23,22 +23,25 @@ More
 Here's the `--help`:
 ```console
 $ ./rex --help
-usage: rex [-h] [-j] [-i] pattern [files [files ...]]
+usage: rex [-h] [-j] [-i] [-s SEPARATOR] pattern [files [files ...]]
 
 Extract substrings from lines of text using a regular expression.
 
 positional arguments:
-  pattern            Python-style regular expression against which to match
-                     input lines
-  files              Paths to files to read line-by-line. Standard input ("-")
-                     is the default.
+  pattern               Python-style regular expression against which to match
+                        input lines
+  files                 Paths to files to read line-by-line. Standard input
+                        ("-") is the default.
 
 optional arguments:
-  -h, --help         show this help message and exit
-  -j, --json         output matches as an array of JSON strings, one array per
-                     match
-  -i, --ignore-case  match without making a distinction between upper case and
-                     lower case
+  -h, --help            show this help message and exit
+  -j, --json            output matches as an array of JSON strings, one array
+                        per match
+  -i, --ignore-case     match without making a distinction between upper case
+                        and lower case
+  -s SEPARATOR, --separator SEPARATOR
+                        separate subpatterns with specified string (defaults
+                        to a space)
 
 Read lines from the optionally specified input files (or from standard input
 if no files are specified), and print results to standard output. If the
