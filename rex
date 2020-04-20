@@ -77,5 +77,8 @@ def main(args):
 
 
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, signal.SIG_DFL) # signal signal signal signal
+    # Default some POSIX signals.
+    for name in ('SIGINT', 'SIGPIPE'):
+        signal.signal(getattr(signal, name), signal.SIG_DFL)
+
     main(sys.argv[1:])
